@@ -60,18 +60,19 @@
       var(--theme-light), var(--theme-light)
     ); 
   }
-  > item-form {
-    z-index: 10002;
-    grid-column: 1;
-    grid-row: 6 / 8;
-  }
   > div:last-child {
-    z-index: 10001;
-    grid-column: 1;
-    grid-row: 6 / 8;
-    display: grid;
-    justify-items: center;
-    grid-template-columns: 1fr;
-    overflow-y: scroll;
+    display: contents;
+    > * {
+      z-index: 10001;
+      grid-column: 1;
+      grid-row: 6 / 8;
+      display: grid;
+      justify-items: center;
+      grid-template-columns: 1fr;
+      overflow-y: scroll;
+    }
+    > item-form {
+      z-index: 10002;
+    }
   }
 }

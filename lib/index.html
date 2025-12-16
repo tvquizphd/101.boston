@@ -29,6 +29,10 @@
           "@lib/page-root.css": "/page-root.css",
           "@lib/item-form.js": "/item-form.js",
           "@lib/item-form.css": "/item-form.css",
+          "@lib/signup-form.js": "/signup-form.js",
+          "@lib/signup-form.css": "/signup-form.css",
+          "@lib/signin-form.js": "/signin-form.js",
+          "@lib/signin-form.css": "/signin-form.css",
           "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
           "leaflet/dist/leaflet.css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
           "esri-leaflet": "https://unpkg.com/esri-leaflet@3.0.19/dist/esri-leaflet.js",
@@ -46,6 +50,25 @@
       <button id="meet">meet</button>
       <button id="signin">sign in</button>
       <button id="signup">sign up</button>
+    </template>
+    <template id="user-form-view">
+      <form>
+        <div>
+					<input
+						id="username" name="username" type="text"
+            autocomplete="current-username" required
+          />
+					<label for="username">Username?</label>
+        </div>
+				<div>
+					<input
+						id="password" name="password" type="password"
+            autocomplete="current-password" required
+					/>
+					<label for="password">Password?</label>
+				</div>
+				<input id="submit" type="submit" value="">
+       </form>
     </template>
     <template id="item-form-view">
       <form>
@@ -90,9 +113,11 @@
       <toolbar-row options=""></toolbar-row>
       <item-map></item-map>
       <div id="item-form-gradient"></div>
-      <item-form item_key=""></item-form>
       <div>
+        <item-form item_key=""></item-form>
         <meeting-list meetings=""></meeting-list>
+        <signup-form></signup-form>
+        <signin-form></signin-form>
       </div>
     </template>
     <page-root session="" item_key="" stops="" show_form></page-root>
