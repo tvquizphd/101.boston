@@ -1,0 +1,26 @@
+@font-face {
+  font-family: sprat;
+  src: url("Sprat-Medium.otf") format("opentype");
+}
+
+* {
+  font-family: 'sprat', serif;
+}
+
+:host {
+  --row-width: minmax(10em, 80vw);
+  --toolbar-height: 6em;
+  --row-height: 4em;
+  --border-radius: .333em;
+  --font-size: .9em;
+  --gap-major: 1em;
+  --gap-minor: 0.666em;
+  --water-hue: 223;
+  --theme-light: hwb(60 92 0);
+  --theme-water: hwb(var(--water-hue) 59 0);
+  --dark-hwb: var(--water-hue) 10% 70%;
+  --main-hwb: var(--water-hue) 60% 0%;
+  --full-color: hwb(var(--main-hwb) / 1.0);
+  --half-color: hwb(var(--main-hwb) / 0.333);
+  --main-dark-border: 1.5px solid hwb(var(--dark-hwb));
+}

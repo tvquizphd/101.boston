@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="layout.css">
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <script type="module">
+      import { index } from "./bundle.js";
+      index({ });
+    </script>
+		<template id="item-map-view">
+			<div id='map'></div>
+		</template>
+    <template id="page-root-view">
+      <div show="items">
+        <item-list items=""></item-list>
+      </div>
+			<item-map></item-map>
+    </template>
+    <page-root item_key=""></page-root>
+</body>

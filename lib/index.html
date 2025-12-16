@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="page-body.css">
+    <link rel="stylesheet" href="variables.css">
+</head>
+<body>
+    <script type="importmap">
+      {
+        "imports": {
+          "index": "/index.js",
+          "@lib/api.js": "/api.js",
+          "@lib/utils.js": "/utils.js",
+          "@lib/map-config.js": "/map-config.js",
+          "@lib/item-map-events.js": "/item-map-events.js",
+          "@lib/variables.css": "/variables.css",
+          "@lib/toolbar-row.js": "/toolbar-row.js",
+          "@lib/toolbar-row.css": "/toolbar-row.css",
+          "@lib/item-list.js": "/item-list.js",
+          "@lib/item-list.css": "/item-list.css",
+          "@lib/meeting-list.js": "/meeting-list.js",
+          "@lib/meeting-list.css": "/meeting-list.css",
+          "@lib/item-map.js": "/item-map.js",
+          "@lib/item-map.css": "/item-map.css",
+          "@lib/page-root.js": "/page-root.js",
+          "@lib/page-root.css": "/page-root.css",
+          "@lib/item-form.js": "/item-form.js",
+          "@lib/item-form.css": "/item-form.css",
+          "L": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+          "leaflet/dist/leaflet.css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+          "esri-leaflet": "https://unpkg.com/esri-leaflet@3.0.19/dist/esri-leaflet.js",
+          "svg-data-uri": "https://ga.jspm.io/npm:svg-data-uri@1.0.1/svg-data-uri.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import { index } from "index";
+      index({ });
+    </script>
+    <template id="toolbar-row-view">
+      <button id="home">home</button>
+      <button id="edit">edit</button>
+      <button id="meet">meet</button>
+      <button id="signin">sign in</button>
+      <button id="signup">sign up</button>
+    </template>
+    <template id="item-form-view">
+      <form>
+        <div>
+					<input
+						id="pickup" name="pickup" type="datetime-local" required
+					/>
+					<label for="pickup">When?</label>
+        </div>
+				<div>
+					<input
+						id="title" name="title" type="text" required
+					/>
+					<label for="title">What?</label>
+				</div>
+        <div>
+					<select
+						id="stop_key" name="stop_key" required
+					>
+          </select>
+					<label for="stop_key">Where?</label>
+        </div>
+				<input id="submit" type="submit" value="">
+       </form>
+    </template>
+    <template id="item-map-view">
+      <div id='map'></div>
+    </template>
+    <template id="meeting-list-item">
+      <div id='giver'></div>
+      <div id='taker'></div>
+      <div id='pickup_date'></div>
+      <div id='pickup_time'></div>
+      <button id="approved">Approve</button>
+      <button id="fulfilled">Fulfill</button>
+    </template>
+    <template id="page-root-view">
+      <div>
+        <item-list items=""></item-list>
+      </div>
+      <div id="toolbar-row-gradient"></div>
+      <toolbar-row options=""></toolbar-row>
+      <item-map></item-map>
+      <div id="item-form-gradient"></div>
+      <item-form item_key=""></item-form>
+      <div>
+        <meeting-list meetings=""></meeting-list>
+      </div>
+    </template>
+    <page-root session="" item_key="" stops="" show_form></page-root>
+</body>

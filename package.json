@@ -1,0 +1,31 @@
+{
+  "name": "local-boston",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "bundle": "rollup -c",
+    "serve": "npx http-server -p 8000 lib",
+    "copy-js": "sudo cp dist/bundle.js index.html /var/www/html/",
+    "copy-css": "sudo cp lib/*.css lib/*.otf /var/www/html/",
+    "build": "pnpm bundle && pnpm copy-js && pnpm copy-css"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@rollup/plugin-alias": "^6.0.0",
+    "@rollup/plugin-babel": "^6.1.0",
+    "@rollup/plugin-commonjs": "^29.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "core-js": "^3.47.0",
+    "http-server": "^14.1.1",
+    "rollup": "^4.53.3",
+    "rollup-plugin-css-modules": "^0.1.2"
+  },
+  "dependencies": {
+    "esri-leaflet": "^3.0.19",
+    "leaflet": "^1.9.4"
+  }
+}
