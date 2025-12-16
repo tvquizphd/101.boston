@@ -4,5 +4,5 @@
 - I've created [a classic token][new-token] with `repo` scope.
 
 
-[new-env]: ./settings/environments/713732704/edit
+[new-env]: https://github.com/tvquizphd/101.boston/settings/environments/new
 [new-token]: https://github.com/settings/tokens/new
