@@ -7,8 +7,8 @@ Hi! This application is intended for folks to post and share free items they hav
 - The username and password are stored in the AWS Secrets Manager
 
   
-Here's a 2-3 minute video: https://youtube.com/shorts/B1_Ls2yMtnA
-Here's an 8 minute video: 
+- Here's a 2-3 minute video: https://youtube.com/shorts/B1_Ls2yMtnA
+- Here's an 8 minute video: 
 
 ### Setup
 
