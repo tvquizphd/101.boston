@@ -1,6 +1,5 @@
 ### Setup
 
-- I've created [a GitHub environment][new-env] named `TEST`
 - I've created [a fine-grained token][new-token] with `repo` scope for this repo.
 
 ![GitHub Token](docs/github_token.png)
