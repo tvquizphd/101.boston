@@ -25,6 +25,7 @@
             "Effect": "Allow",
             "Action": [
                 "secretsmanager:GetRandomPassword",
+                "secretsmanager:*",
                 "secretsmanager:ListSecrets",
                 "secretsmanager:BatchGetSecretValue"
             ],
@@ -37,6 +38,12 @@
                 "secretsmanager:GetSecretValue",
                 "secretsmanager:*"
             ],
+            "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": "secretsmanager:*",
             "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
         }
     ]

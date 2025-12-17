@@ -27,8 +27,8 @@ const read_secret = async (secret_name) => {
 	return response.SecretString;
 };
 
-const login_github = () => {
-  const auth = read_secret(
+const login_github = async () => {
+  const auth = await read_secret(
 		"GITHUB_TOKEN"
   );
 	const GitHubEditor = Octokit.plugin(
@@ -37,7 +37,7 @@ const login_github = () => {
 	return new GitHubEditor({ auth });
 }
 
-const add_entries = (octokit, entries) => {
+const add_entries = async (octokit, entries) => {
 	const { updated, deleted, data } = await octokit.createOrUpdateTextFile({
 		owner: "tvquizphd",
 		repo: "101.boston",
@@ -122,8 +122,8 @@ export const handler = async (event) => {
       // Implement logic to retrieve all connections from DB and send message
       // using the ApiGatewayManagementApi
       response = { statusCode: 200, body: 'Message received.' };
-			const octokit = login_github();
-			add_entries(octokit, ["TEST", "FOO", "BAR"])
+			const octokit = await login_github();
+			await add_entries(octokit, ["TEST", "FOO", "BAR"])
       break;
 
     default:
