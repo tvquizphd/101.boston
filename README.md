@@ -7,6 +7,7 @@
 - I've added that token as `GITHUB_TOKEN` in AWS Secrets Manager.
 - I've created an AWS Lambda function with a WebSocket API Gateway.
 - In API Gateway, I use a "route key" to route each Websocket message.
+- I enabled two-way communication
 
 ![Route Key](docs/route_key.png)
 

@@ -1,13 +1,30 @@
 import { OPS, OP } from "opaque-low-io";
 import { Octokit } from "octokit";
 import http from 'http';
+import crypto from "crypto";
 import {
 	createOrUpdateTextFile
 } from "@octokit/plugin-create-or-update-text-file";
 import {
 	SecretsManagerClient,
 	GetSecretValueCommand,
+	CreateSecretCommand
 } from "@aws-sdk/client-secrets-manager";
+
+const create_aws_secret = async (name, value) => {
+	const client = new SecretsManagerClient({
+		region: "us-east-2",
+	});
+	const input = {
+		ClientRequestToken: crypto.randomUUID(),
+		Description: "",
+		Name: name,
+		SecretString: JSON.stringify(value) 
+	};
+	const command = new CreateSecretCommand(input);
+	const response = await client.send(command);
+	return {input, response}; //TODO
+}
 
 const read_secret = async (secret_name) => {
 	const client = new SecretsManagerClient({
@@ -24,7 +41,8 @@ const read_secret = async (secret_name) => {
 	} catch (error) {
 		throw error;
 	}
-	return response.SecretString;
+	const { GITHUB_TOKEN } = JSON.parse(response.SecretString);
+	return GITHUB_TOKEN;
 };
 
 const login_github = async () => {
@@ -117,13 +135,13 @@ export const handler = async (event) => {
       break;
 
     case 'client_auth_data':
-      // Handle a custom message 
       console.log(`client auth Message from ${connectionId}: ${body.message}`);
-      // Implement logic to retrieve all connections from DB and send message
-      // using the ApiGatewayManagementApi
-      response = { statusCode: 200, body: 'Message received.' };
+
 			const octokit = await login_github();
 			await add_entries(octokit, ["TEST", "FOO", "BAR"])
+
+			const ok = await create_aws_secret("ABCDEFGHIJKLMNOP", {foo: "bar"});
+      response = { statusCode: 200, body: JSON.stringify(ok) };
       break;
 
     default:
