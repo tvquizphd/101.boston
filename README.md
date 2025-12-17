@@ -1,3 +1,11 @@
+## Item Listing App
+
+Hi! This application is intended for folks to post and share free items they have around town. I sucessfully accomplished every element of the front-end user-interface I had intended to implement, but only certain parts of the AWS or GitHub backend are partly functional:
+
+- We use AWS API Gateway to generate a Websocket API that cooresponds with a Lambda function.
+- Right now, that function directly takes the username and password submitted, and stores them.
+- The username and password are stored in the AWS Secrets Manager
+
 https://youtu.be/7CmMUdyb2bE
 
 ### Setup
