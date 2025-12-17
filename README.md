@@ -6,9 +6,14 @@ Hi! This application is intended for folks to post and share free items they hav
 - Right now, that function directly takes the username and password submitted, and stores them.
 - The username and password are stored in the AWS Secrets Manager
 
+As a proof of concept, a new "Lost Cat" is added to a random location on the map whenever a new user is created.
+
+- This is done to simulate the same functionality as manual addition of items by the users
+- This is accomplished by AWS lambda using a GITHUB_TOKEN to update this very github repo.
+
   
 - Here's a 2-3 minute video: https://youtube.com/shorts/B1_Ls2yMtnA
-- Here's an 8 minute video: 
+- Here's an 8+ minute video: https://youtu.be/1rVc3uZ53qI
 
 ### Setup
 
