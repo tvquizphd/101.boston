@@ -12,14 +12,81 @@
       import { index } from "./bundle.js";
       index({ });
     </script>
-		<template id="item-map-view">
-			<div id='map'></div>
-		</template>
+    <template id="toolbar-row-view">
+      <button id="home">home</button>
+      <button id="edit">edit</button>
+      <button id="meet">meet</button>
+      <button id="signin">sign in</button>
+      <button id="signup">sign up</button>
+    </template>
+    <template id="user-form-view">
+      <form>
+        <div>
+					<input
+						id="username" name="username" type="text"
+            autocomplete="current-username" required
+          />
+					<label for="username">Username?</label>
+        </div>
+				<div>
+					<input
+						id="password" name="password" type="password"
+            autocomplete="current-password" required
+					/>
+					<label for="password">Password?</label>
+				</div>
+				<input id="submit" type="submit" value="">
+       </form>
+    </template>
+    <template id="item-form-view">
+      <form>
+        <div>
+					<input
+						id="pickup" name="pickup" type="datetime-local" required
+					/>
+					<label for="pickup">When?</label>
+        </div>
+				<div>
+					<input
+						id="title" name="title" type="text" required
+					/>
+					<label for="title">What?</label>
+				</div>
+        <div>
+					<select
+						id="stop_key" name="stop_key" required
+					>
+          </select>
+					<label for="stop_key">Where?</label>
+        </div>
+				<input id="submit" type="submit" value="">
+       </form>
+    </template>
+    <template id="item-map-view">
+      <div id='map'></div>
+    </template>
+    <template id="meeting-list-item">
+      <div id='giver'></div>
+      <div id='taker'></div>
+      <div id='pickup_date'></div>
+      <div id='pickup_time'></div>
+      <button id="approved">Approve</button>
+      <button id="fulfilled">Fulfill</button>
+    </template>
     <template id="page-root-view">
-      <div show="items">
+      <div>
         <item-list items=""></item-list>
       </div>
-			<item-map></item-map>
+      <div id="toolbar-row-gradient"></div>
+      <toolbar-row options=""></toolbar-row>
+      <item-map></item-map>
+      <div id="item-form-gradient"></div>
+      <div>
+        <item-form item_key=""></item-form>
+        <meeting-list meetings=""></meeting-list>
+        <signup-form></signup-form>
+        <signin-form></signin-form>
+      </div>
     </template>
-    <page-root item_key=""></page-root>
+    <page-root session="" item_key="" stops="" show_form></page-root>
 </body>
