@@ -36,44 +36,56 @@ As a proof of concept, a new "Lost Cat" is added to a random location on the map
 
 ```
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "secretsmanager:GetRandomPassword",
-                "secretsmanager:*",
-                "secretsmanager:ListSecrets",
-                "secretsmanager:BatchGetSecretValue"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": [
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:*"
-            ],
-            "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
-        },
-        {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": "secretsmanager:*",
-            "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
-        },
-        {
-            "Sid": "VisualEditor3",
-            "Effect": "Allow",
-            "Action": [
-                "execute-api:*",
-                "execute-api:Invoke"
-            ],
-            "Resource": "arn:aws:execute-api:us-east-2:123456789012:2136mdeg35/TEST/@connections/*"
-        }
-    ]
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "VisualEditor0",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:GetRandomPassword",
+				"secretsmanager:*",
+				"secretsmanager:ListSecrets",
+				"secretsmanager:BatchGetSecretValue",
+				"execute-api:*"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "VisualEditor1",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:GetSecretValue",
+				"secretsmanager:*"
+			],
+			"Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
+		},
+		{
+			"Sid": "VisualEditor2",
+			"Effect": "Allow",
+			"Action": "secretsmanager:*",
+			"Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
+		},
+		{
+			"Sid": "Statement1",
+			"Effect": "Allow",
+			"Action": [
+				"execute-api:*"
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "Statement2",
+			"Effect": "Allow",
+			"Action": [
+				"secretsmanager:*"
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	]
 }
 ```
 
