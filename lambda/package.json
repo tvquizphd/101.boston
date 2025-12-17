@@ -1,0 +1,14 @@
+{
+  "name": "register-user",
+  "version": "1.0.0",
+  "main": "./index.mjs",
+  "scripts": {
+    "zip": "zip -r register-user.zip .",
+    "up": "aws lambda update-function-code --function-name register-user --zip-file fileb://~/listings/lambda/register-user.zip"
+  },
+  "dependencies": {
+    "@octokit/plugin-create-or-update-text-file": "^6.0.3",
+    "octokit": "^5.0.5",
+    "opaque-low-io": "^4.0.0"
+  }
+}
