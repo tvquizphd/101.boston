@@ -7,6 +7,7 @@
     "up": "aws lambda update-function-code --function-name register-user --zip-file fileb://~/listings/lambda/register-user.zip"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.953.0",
     "@octokit/plugin-create-or-update-text-file": "^6.0.3",
     "octokit": "^5.0.5",
     "opaque-low-io": "^4.0.0"

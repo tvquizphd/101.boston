@@ -1,10 +1,36 @@
 import { OPS, OP } from "opaque-low-io";
 import { Octokit } from "octokit";
+import http from 'http';
 import {
 	createOrUpdateTextFile
 } from "@octokit/plugin-create-or-update-text-file";
+import {
+	SecretsManagerClient,
+	GetSecretValueCommand,
+} from "@aws-sdk/client-secrets-manager";
 
-const login_github = (auth) => {
+const read_secret = async (secret_name) => {
+	const client = new SecretsManagerClient({
+		region: "us-east-2",
+	});
+	let response;
+	try {
+		response = await client.send(
+			new GetSecretValueCommand({
+				SecretId: secret_name,
+				VersionStage: "AWSCURRENT"
+			})
+		);
+	} catch (error) {
+		throw error;
+	}
+	return response.SecretString;
+};
+
+const login_github = () => {
+  const auth = read_secret(
+		"GITHUB_TOKEN"
+  );
 	const GitHubEditor = Octokit.plugin(
 		createOrUpdateTextFile
 	);
@@ -25,7 +51,8 @@ const add_entries = (octokit, entries) => {
 			])
 		},
 		message: "update database",
-})
+	})
+}
 
 /*
 const vStart = async (opts) => {
@@ -95,6 +122,8 @@ export const handler = async (event) => {
       // Implement logic to retrieve all connections from DB and send message
       // using the ApiGatewayManagementApi
       response = { statusCode: 200, body: 'Message received.' };
+			const octokit = login_github();
+			add_entries(octokit, ["TEST", "FOO", "BAR"])
       break;
 
     default:
