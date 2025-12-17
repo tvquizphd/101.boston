@@ -46,6 +46,15 @@
             "Effect": "Allow",
             "Action": "secretsmanager:*",
             "Resource": "arn:aws:secretsmanager:us-east-1:111122223333:secret:SECRET_NAME"
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": [
+                "execute-api:*",
+                "execute-api:Invoke"
+            ],
+            "Resource": "arn:aws:execute-api:us-east-2:123456789012:2136mdeg35/TEST/@connections/*"
         }
     ]
 }

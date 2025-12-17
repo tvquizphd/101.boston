@@ -1,3 +1,7 @@
+import { 
+	ApiGatewayManagementApiClient, PostToConnectionCommand
+} from '@aws-sdk/client-apigatewaymanagementapi';
+
 import { OPS, OP } from "opaque-low-io";
 import { Octokit } from "octokit";
 import http from 'http';
@@ -11,6 +15,21 @@ import {
 	CreateSecretCommand
 } from "@aws-sdk/client-secrets-manager";
 
+const random_mbta_stop = () => {
+  const stops = [
+        "place-alfcl", "place-davis", "place-portr", "place-harsq", "place-cntsq", "place-knncl", "place-sull", "place-astao", "place-welln", "place-mlmnl", "place-ogmnl", "place-lech", "place-unsqu", "place-esomr", "place-gilmn", "place-mgngl", "place-balsq", "place-mdftf", "2718", "2719", "2721", "2723", "2725", "2726", "2729", "5305", "5306", "5307", "5308", "5309", "5310", "5311", "5312", "5314", "5315", "5316", "5034", "5317", "5319", "63241", "50021", "45003", "5321", "5322", "5323", "5324", "5325", "5333", "5334", "5335", "5336", "5337", "5338", "place-NHRML-0055", "5040", "5328", "9028", "5330", "5331", "45332", "5332", "8308", "5282", "5283", "5284", "5285", "5286", "5287", "5002", "5031", "5032", "5290", "5291", "5292", "5293", "5294", "5295", "5296", "5297", "5298", "5299", "5300", "5301", "5302", "5303", "2704", "2706", "2707", "2710", "2711", "2713", "2714" ]
+  return stops[Math.floor(Math.random() * stops.length)];
+}
+
+const new_item = () => {
+  return {
+      "title": "Lost Cat",
+      "stop_key": random_mbta_stop(),
+      "pickup": to_date("2025-12-21", 0),
+      "item_key": crypto.randomUUID(),
+  }
+}
+
 const create_aws_secret = async (name, value) => {
 	const client = new SecretsManagerClient({
 		region: "us-east-2",
@@ -23,10 +42,10 @@ const create_aws_secret = async (name, value) => {
 	};
 	const command = new CreateSecretCommand(input);
 	const response = await client.send(command);
-	return {input, response}; //TODO
+	return {input, response};
 }
 
-const read_secret = async (secret_name) => {
+const read_aws_secret = async (secret_name) => {
 	const client = new SecretsManagerClient({
 		region: "us-east-2",
 	});
@@ -39,16 +58,23 @@ const read_secret = async (secret_name) => {
 			})
 		);
 	} catch (error) {
-		throw error;
+		return {}
 	}
-	const { GITHUB_TOKEN } = JSON.parse(response.SecretString);
-	return GITHUB_TOKEN;
+	return JSON.parse(response.SecretString);
 };
 
 const login_github = async () => {
-  const auth = await read_secret(
-		"GITHUB_TOKEN"
-  );
+  let auth = "";
+	try {
+		const result = await read_aws_secret(
+			"GITHUB_TOKEN"
+		);
+		const { GITHUB_TOKEN } = result;
+		auth = GITHUB_TOKEN;
+	}
+	catch (error) {
+		return null;
+	}
 	const GitHubEditor = Octokit.plugin(
 		createOrUpdateTextFile
 	);
@@ -56,20 +82,26 @@ const login_github = async () => {
 }
 
 const add_entries = async (octokit, entries) => {
-	const { updated, deleted, data } = await octokit.createOrUpdateTextFile({
-		owner: "tvquizphd",
-		repo: "101.boston",
-		path: "database.json",
-		content({ exists, content }) {
-			// do not create file
-			if (!exists) return null;
-			const existing = JSON.parse(content);
-			return JSON.stringify([
-				...existing, ...entries
-			])
-		},
-		message: "update database",
-	})
+	try {
+		const { updated, deleted, data } = await octokit.createOrUpdateTextFile({
+			owner: "tvquizphd",
+			repo: "101.boston",
+			path: "database.json",
+			content({ exists, content }) {
+				// do not create file
+				if (!exists) return null;
+				const existing = JSON.parse(content);
+				return JSON.stringify([
+					...existing, ...entries
+				])
+			},
+			message: "update database"
+		})
+		return { updated };
+	}
+	catch ( error ) {
+		return { error };
+	}
 }
 
 /*
@@ -112,12 +144,12 @@ const vStart = async (opts) => {
 export const handler = async (event) => {
   console.log('WebSocket event received:', event);
 
-  const connectionId = event.requestContext.connectionId;
+	const { connectionId, domainName, stage } = event.requestContext;
+	const { routeKey } = event.requestContext;
+  console.log("ROUTEROUTE" + routeKey)
   // e.g., "$connect", "$disconnect", "sendMessage"
-  const routeKey = event.requestContext.routeKey;
   //const body = event.body ? JSON.parse(event.body) : {};
   // No JSON, IDK?
-  const body = event;
 
   let response;
 
@@ -135,13 +167,37 @@ export const handler = async (event) => {
       break;
 
     case 'client_auth_data':
-      console.log(`client auth Message from ${connectionId}: ${body.message}`);
+
+			const body = JSON.parse(event.body);
+			const { username, password } = body.v.client_auth_data;
 
 			const octokit = await login_github();
-			await add_entries(octokit, ["TEST", "FOO", "BAR"])
+			let github_result = null;
+			if (octokit) {
+				github_result = await add_entries(octokit, [
+          new_item()
+        ])
+			}
+			try {
+				await create_aws_secret(
+					username, { password }
+				);
+			}
+			catch (e) {
+				console.log("Already exists")
+				console.log(e);	
+			}
 
-			const ok = await create_aws_secret("ABCDEFGHIJKLMNOP", {foo: "bar"});
-      response = { statusCode: 200, body: JSON.stringify(ok) };
+			// Respond
+
+			const apiGatewayClient = new ApiGatewayManagementApiClient({
+					endpoint: `https://${domainName}/${stage}`,
+			});
+			await apiGatewayClient.send(new PostToConnectionCommand({
+					ConnectionId: connectionId,
+					Data: JSON.stringify({ ok: "ok" }),
+			}));
+      response = { statusCode: 200, body: 'OK' };
       break;
 
     default:
