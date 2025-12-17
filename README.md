@@ -6,7 +6,9 @@ Hi! This application is intended for folks to post and share free items they hav
 - Right now, that function directly takes the username and password submitted, and stores them.
 - The username and password are stored in the AWS Secrets Manager
 
-https://youtu.be/7CmMUdyb2bE
+  
+Here's a 2-3 minute video: https://youtube.com/shorts/B1_Ls2yMtnA
+Here's an 8 minute video: 
 
 ### Setup
 
