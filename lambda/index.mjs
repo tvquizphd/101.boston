@@ -20,7 +20,11 @@ const random_mbta_stop = () => {
         "place-alfcl", "place-davis", "place-portr", "place-harsq", "place-cntsq", "place-knncl", "place-sull", "place-astao", "place-welln", "place-mlmnl", "place-ogmnl", "place-lech", "place-unsqu", "place-esomr", "place-gilmn", "place-mgngl", "place-balsq", "place-mdftf", "2718", "2719", "2721", "2723", "2725", "2726", "2729", "5305", "5306", "5307", "5308", "5309", "5310", "5311", "5312", "5314", "5315", "5316", "5034", "5317", "5319", "63241", "50021", "45003", "5321", "5322", "5323", "5324", "5325", "5333", "5334", "5335", "5336", "5337", "5338", "place-NHRML-0055", "5040", "5328", "9028", "5330", "5331", "45332", "5332", "8308", "5282", "5283", "5284", "5285", "5286", "5287", "5002", "5031", "5032", "5290", "5291", "5292", "5293", "5294", "5295", "5296", "5297", "5298", "5299", "5300", "5301", "5302", "5303", "2704", "2706", "2707", "2710", "2711", "2713", "2714" ]
   return stops[Math.floor(Math.random() * stops.length)];
 }
-
+const to_date = (iso_date, hour, minute=0) => {
+	const h = `${hour}`.padStart(2, '0');
+	const m = `${minute}`.padStart(2, '0');
+	return `${iso_date}T${h}:${m}`;
+  }       
 const new_item = () => {
   return {
       "title": "Lost Cat",
@@ -31,17 +35,23 @@ const new_item = () => {
 }
 
 const create_aws_secret = async (name, value) => {
+	console.log("livedemo we want to create a secret")
 	const client = new SecretsManagerClient({
 		region: "us-east-2",
 	});
+	console.log("livedemo we have aws secret client")
 	const input = {
 		ClientRequestToken: crypto.randomUUID(),
 		Description: "",
 		Name: name,
 		SecretString: JSON.stringify(value) 
 	};
+	console.log("livedemo we have aws secret input")
+	console.log(input)
 	const command = new CreateSecretCommand(input);
+	console.log("livedemo we created a command")
 	const response = await client.send(command);
+	console.log("livedemo we sent the command")
 	return {input, response};
 }
 
@@ -177,7 +187,7 @@ export const handler = async (event) => {
 				github_result = await add_entries(octokit, [
           new_item()
         ])
-			}
+		}
 			try {
 				await create_aws_secret(
 					username, { password }
@@ -199,7 +209,6 @@ export const handler = async (event) => {
 			}));
       response = { statusCode: 200, body: 'OK' };
       break;
-
     default:
       // Handle other routes or $default
       console.log('Default route or unknown action:', routeKey);
