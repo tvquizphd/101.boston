@@ -10,7 +10,10 @@ import path from 'path';
 export default {
   input: 'lib/index.js',
   plugins: [
-    resolve(),
+    resolve({
+      browser: true, 
+      preferBuiltins: false
+    }),
     alias({
       entries: [
         { find: '@lib', replacement: path.resolve(import.meta.dirname, 'lib') },
@@ -37,11 +40,11 @@ export default {
     json(),
     commonjs(),
     cssModules(),
-    terser()
+//    terser()
   ],
   output: {
     file: 'dist/bundle.js',
     format: 'es',
-    sourcemap: false
-  } 
+    sourcemap: false,
+  }
 };

@@ -1,19 +1,9 @@
-## Item Listing App
+### Running
 
-Hi! This application is intended for folks to post and share free items they have around town. I sucessfully accomplished every element of the front-end user-interface I had intended to implement, but only certain parts of the AWS or GitHub backend are partly functional:
-
-- We use AWS API Gateway to generate a Websocket API that cooresponds with a Lambda function.
-- Right now, that function directly takes the username and password submitted, and stores them.
-- The username and password are stored in the AWS Secrets Manager
-
-As a proof of concept, a new "Lost Cat" is added to a random location on the map whenever a new user is created.
-
-- This is done to simulate the same functionality as manual addition of items by the users
-- This is accomplished by AWS lambda using a GITHUB_TOKEN to update this very github repo.
-
-  
-- Here's a 2-3 minute video: https://youtube.com/shorts/B1_Ls2yMtnA
-- Here's an 8+ minute video: https://youtu.be/1rVc3uZ53qI
+- From repo directory, run `npx http-server`
+- Open "localhost:8080/lib" for development.
+- For production, "pnpm install && pnpm build"
+- Open "localhost:8080/dist" for production.
 
 ### Setup
 

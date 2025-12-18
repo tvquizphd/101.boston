@@ -8,54 +8,8 @@
     <link rel="stylesheet" href="variables.css">
 </head>
 <body>
-    <script type="importmap">
-      {
-        "imports": {
-          "index": "./index.js",
-          "@lib/api.js": "./api.js",
-          "@lib/io.js": "./io.js",
-          "@lib/utils.js": "./utils.js",
-          "@lib/map-config.js": "./map-config.js",
-          "@lib/item-map-events.js": "./item-map-events.js",
-          "@lib/variables.css": "./variables.css",
-          "@lib/toolbar-row.js": "./toolbar-row.js",
-          "@lib/toolbar-row.css": "./toolbar-row.css",
-          "@lib/item-list.js": "./item-list.js",
-          "@lib/item-list.css": "./item-list.css",
-          "@lib/meeting-list.js": "./meeting-list.js",
-          "@lib/meeting-list.css": "./meeting-list.css",
-          "@lib/item-map.js": "./item-map.js",
-          "@lib/item-map.css": "./item-map.css",
-          "@lib/page-root.js": "./page-root.js",
-          "@lib/page-root.css": "./page-root.css",
-          "@lib/item-form.js": "./item-form.js",
-          "@lib/item-form.css": "./item-form.css",
-          "@lib/signup-form.js": "./signup-form.js",
-          "@lib/signup-form.css": "./signup-form.css",
-          "@lib/signin-form.js": "./signin-form.js",
-          "@lib/signin-form.css": "./signin-form.css",
-          "leaflet": "./leaflet@1.9.4/index.js",
-          "esri-leaflet": "./esri-leaflet@3.0.13/index.js",
-          "@lib/leaflet@1.9.4/leaflet.css": "./leaflet@1.9.4/leaflet.css",
-          "svg-data-uri": "https://ga.jspm.io/npm:svg-data-uri@1.0.1/svg-data-uri.js",
-          "opaque-low-io": "https://ga.jspm.io/npm:opaque-low-io@4.0.0/dist/index.mjs"
-        },
-       "scopes": {
-          "https://ga.jspm.io/": {
-            "buffer": "https://ga.jspm.io/npm:@jspm/core@2.1.0/nodelibs/browser/buffer.js",
-            "crypto": "https://ga.jspm.io/npm:@jspm/core@2.1.0/nodelibs/browser/crypto.js",
-            "fs": "https://ga.jspm.io/npm:@jspm/core@2.1.0/nodelibs/browser/fs.js",
-            "libsodium-sumo": "https://ga.jspm.io/npm:libsodium-sumo@0.7.15/dist/modules-sumo/libsodium-sumo.js",
-            "libsodium-wrappers-sumo": "https://ga.jspm.io/npm:libsodium-wrappers-sumo@0.7.15/dist/modules-sumo/libsodium-wrappers.js",
-            "oprf": "https://ga.jspm.io/npm:oprf@2.0.0/build/oprf.js",
-            "path": "https://ga.jspm.io/npm:@jspm/core@2.1.0/nodelibs/browser/path.js",
-            "process": "https://ga.jspm.io/npm:@jspm/core@2.1.0/nodelibs/browser/process.js"
-          }
-        } 
-      }
-    </script>
     <script type="module">
-      import { index } from "index";
+      import { index } from "./bundle.js";
       index({ });
     </script>
     <template id="toolbar-row-view">

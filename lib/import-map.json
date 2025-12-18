@@ -1,0 +1,12 @@
+{
+  "imports": {
+    "esri-leaflet": "https://ga.jspm.io/npm:esri-leaflet@3.0.19/src/EsriLeaflet.js",
+    "leaflet": "https://ga.jspm.io/npm:leaflet@1.9.4/dist/leaflet-src.js"
+  },
+  "scopes": {
+    "https://ga.jspm.io/": {
+      "@terraformer/arcgis": "https://ga.jspm.io/npm:@terraformer/arcgis@2.1.2/dist/t-arcgis.esm.js",
+      "tiny-binary-search": "https://ga.jspm.io/npm:tiny-binary-search@1.0.3/dist/binary-search-index.js"
+    }
+  }
+}

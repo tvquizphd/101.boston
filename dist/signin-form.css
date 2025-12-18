@@ -1,0 +1,41 @@
+:host {
+  display: grid;
+  gap: var(--gap-minor);
+  padding: var(--gap-minor);
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  pointer-events: none;
+  > form {
+    display: none;
+    > div {
+      width: 100%;
+      display: grid;
+      grid-template-rows: auto auto;
+    }
+    select, input {
+      font-size: var(--font-size);
+      pointer-events: all;
+      width: 100%;
+    }
+    > input[type="submit"] {
+      padding: 0;
+      max-width: 80%;
+      max-height: 100%;
+      width: 100px;
+      height: 50px;
+      cursor: pointer;
+      align-items: center;
+      justify-items: center;
+      border: var(--main-dark-border);
+      border-radius: var(--border-radius);
+      background-color: var(--full-color);
+      display: grid;
+    }
+  }
+  > form[shown] {
+    display: contents;
+  }
+}

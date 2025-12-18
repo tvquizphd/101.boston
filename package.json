@@ -7,9 +7,9 @@
   "scripts": {
     "bundle": "rollup -c",
     "serve": "npx http-server -p 8000 lib",
-    "copy-js": "sudo cp dist/bundle.js index.html /var/www/html/",
-    "copy-css": "sudo cp lib/*.css lib/*.otf /var/www/html/",
-    "build": "pnpm bundle && pnpm copy-js && pnpm copy-css"
+    "copy-keys-html": "cp -R lib/keys index.html dist/",
+    "copy-css-otf": "cp -R lib/*.css lib/*.otf dist/",
+    "build": "pnpm bundle && pnpm copy-keys-html && pnpm copy-css-otf"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",
@@ -22,13 +22,19 @@
     "@rollup/plugin-terser": "^0.4.4",
     "core-js": "^3.47.0",
     "http-server": "^14.1.1",
-    "leaflet": "^1.9.4",
     "opaque-low-io": "^4.0.0",
     "rollup": "^4.53.3",
     "rollup-plugin-css-modules": "^0.1.2"
   },
   "dependencies": {
-    "esri-leaflet": "^3.0.19",
-    "svg-data-uri": "^1.0.1"
+    "svg-data-uri": "^1.0.1",
+    "esri-leaflet": "3.0.13",
+    "leaflet": "1.9.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "leaflet": "file:./lib/leaflet@1.9.4",
+      "esri-leaflet": "file:./lib/esri-leaflet@3.0.13"
+    }
   }
 }
