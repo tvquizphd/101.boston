@@ -4,6 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import terser from '@rollup/plugin-terser';
 import babel from '@rollup/plugin-babel';
 import alias from '@rollup/plugin-alias';
+import json from "@rollup/plugin-json";
 import path from 'path';
 
 export default {
@@ -33,6 +34,7 @@ export default {
         ]
       ]
     }),
+    json(),
     commonjs(),
     cssModules(),
     terser()

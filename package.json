@@ -22,11 +22,13 @@
     "@rollup/plugin-terser": "^0.4.4",
     "core-js": "^3.47.0",
     "http-server": "^14.1.1",
-    "rollup": "^4.53.3",
-    "rollup-plugin-css-modules": "^0.1.2",
     "leaflet": "^1.9.4",
-    "opaque-low-io": "^4.0.0"
+    "opaque-low-io": "^4.0.0",
+    "rollup": "^4.53.3",
+    "rollup-plugin-css-modules": "^0.1.2"
   },
   "dependencies": {
+    "esri-leaflet": "^3.0.19",
+    "svg-data-uri": "^1.0.1"
   }
 }
