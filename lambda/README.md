@@ -41,6 +41,10 @@ aws apigatewayv2 create-route-response --api-id $secretapiid --route-id $routeid
 aws apigatewayv2 create-stage --api-id $secretapiid --stage-name dev > artifacts/secret-stage.json
 aws apigatewayv2 create-deployment --api-id $secretapiid --stage-name dev > artifacts/secret-deployment.json
 
+lambdaname=$(jq -r .FunctionName artifacts/secret-lambda.json)
+accountid=$(aws sts get-caller-identity | jq -r '.Account')
+aws lambda add-permission --function-name $lambdaname --statement-id "APIGatewayInvoke" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/*/client_auth_data"
+
 echo wss://$secretapiid.execute-api.us-east-2.amazonaws.com/dev
 ```
 
