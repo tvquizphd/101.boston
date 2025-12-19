@@ -115,7 +115,7 @@ async function add_items(
   console.log('OOPS YAY', list);
   console.log('OOPS YAY', JSON.stringify(list.concat(items)))
   const content = Buffer.from(
-    JSON.stringify(list.concat(items)), 'utf8'
+    JSON.stringify(JSON.parse(list).concat(items)), 'utf8'
   ).toString('base64');
   console.log('OOPS YAY', content);
   const body = {
