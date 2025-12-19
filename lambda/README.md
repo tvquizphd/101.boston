@@ -36,8 +36,11 @@ secretintegrationid=$(jq -r .IntegrationId artifacts/secret-integration.json)
 
 aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key 'client_auth_data' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/client_auth_data.json
 aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key '$connect' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/connect.json
+aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key '$default' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/default.json
 aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key '$disconnect' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/disconnect.json
+defaultrouteid=$(jq -r .RouteId artifacts/default.json)
 clientauthdatarouteid=$(jq -r .RouteId artifacts/client_auth_data.json)
+aws apigatewayv2 create-route-response --region us-east-2 --api-id $secretapiid --route-id $defaultrouteid --route-response-key '$default' > artifacts/default-response.json
 aws apigatewayv2 create-route-response --region us-east-2 --api-id $secretapiid --route-id $clientauthdatarouteid --route-response-key '$default' > artifacts/client_auth_data-response.json
 
 lambdaname=$(jq -r .FunctionName artifacts/secret-lambda.json)
@@ -45,6 +48,8 @@ accountid=$(aws sts get-caller-identity | jq -r '.Account')
 aws lambda add-permission --function-name $lambdaname --statement-id "client_auth_data" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/client_auth_data"
 aws lambda add-permission --function-name $lambdaname --statement-id "connect" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/\$connect"
 aws lambda add-permission --function-name $lambdaname --statement-id "disconnect" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/\$disconnect"
+aws lambda add-permission --function-name $lambdaname --statement-id "default" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/\$default"
+
 
 aws apigatewayv2 create-stage --region us-east-2 --auto-deploy --api-id $secretapiid --stage-name dev > artifacts/secret-stage.json
 aws apigatewayv2 create-deployment --region us-east-2 --api-id $secretapiid --stage-name dev > artifacts/secret-deployment.json

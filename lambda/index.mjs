@@ -35,23 +35,18 @@ const new_item = () => {
 }
 
 const create_aws_secret = async (name, value) => {
-	console.log("livedemo we want to create a secret")
 	const client = new SecretsManagerClient({
 		region: "us-east-2",
 	});
-	console.log("livedemo we have aws secret client")
 	const input = {
 		ClientRequestToken: crypto.randomUUID(),
 		Description: "",
 		Name: name,
 		SecretString: JSON.stringify(value) 
 	};
-	console.log("livedemo we have aws secret input")
-	console.log(input)
 	const command = new CreateSecretCommand(input);
-	console.log("livedemo we created a command")
 	const response = await client.send(command);
-	console.log("livedemo we sent the command")
+	console.log("DEBUG: we saved the secret")
 	return {input, response};
 }
 
@@ -85,15 +80,12 @@ const login_github = async () => {
 	catch (error) {
 		return null;
 	}
-	const GitHubEditor = Octokit.plugin(
-		createOrUpdateTextFile
-	);
-	return new GitHubEditor({ auth });
+	return new Octokit({ auth });
 }
 
 const add_entries = async (octokit, options, entries) => {
 	try {
-		const { updated, deleted, data } = await octokit.createOrUpdateTextFile({
+		const { updated, deleted, data } = await createOrUpdateTextFile(octokit, {
       ...options,
 			path: "database.json",
 			content({ exists, content }) {
@@ -106,6 +98,7 @@ const add_entries = async (octokit, options, entries) => {
 			},
 			message: "update database"
 		})
+    console.log("DEBUG: we updated the 'database'")
 		return { updated };
 	}
 	catch ( error ) {
@@ -161,7 +154,6 @@ export const handler = async (event) => {
 
 	const { connectionId, domainName, stage } = event.requestContext;
 	const { routeKey } = event.requestContext;
-  console.log("ROUTEROUTE" + routeKey)
   // e.g., "$connect", "$disconnect", "sendMessage"
   //const body = event.body ? JSON.parse(event.body) : {};
   // No JSON, IDK?
@@ -197,7 +189,7 @@ export const handler = async (event) => {
 				);
 			}
 			catch (e) {
-				console.log("Already exists")
+				console.log("Username Already exists")
 				console.log(e);	
 			}
 
