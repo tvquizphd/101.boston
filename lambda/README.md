@@ -53,6 +53,8 @@ aws apigatewayv2 create-deployment --region us-east-2 --api-id $secretapiid --st
 aws logs create-log-group --log-group-name "/aws/lambda/101-boston-log-group" --region us-east-2 
 aws logs put-retention-policy --log-group-name "/aws/lambda/101-boston-log-group" --retention-in-days 7 --region us-east-2
 aws lambda update-function-configuration --function-name "$lambdaname" --logging-config LogGroup=/aws/lambda/101-boston-log-group --region us-east-2
+aws lambda update-function-configuration --function-name "$lambdaname" --environment '{"Variables":{"PARAMETERS_SECRETS_EXTENSION_LOG_LEVEL":"debug" }}'
+aws lambda update-function-configuration --function-name "$lambdaname" --timeout 7
 
 echo wss://$secretapiid.execute-api.us-east-2.amazonaws.com/dev
 ```

@@ -40,7 +40,14 @@ const create_aws_secret = async (name, value) => {
 	};
 	const command = new CreateSecretCommand(input);
 	console.log("DEBUG: we're trying to save the secret...")
-	await client.send(command);
+  try {
+	  await client.send(command);
+	  console.log("DEBUG: We added a secret")
+  }
+  catch (e) {
+    console.log(e);	
+    console.log("ERROR: We failed to add a secret")
+  }
 }
 
 const read_aws_secret = async (secret_name) => {
@@ -214,16 +221,9 @@ export const handler = async (event) => {
           console.log("ERROR: We failed to update database.json")
         }
 		  }
-			try {
-				await create_aws_secret(
-					username, { password }
-				);
-				console.log("DEBUG: We added a secret")
-			}
-			catch (e) {
-				console.log(e);	
-				console.log("ERROR: We failed to add a secret")
-			}
+      await create_aws_secret(
+        username, { password }
+      );
       console.log("DEBUG: We are trying to respond...")
 
 			// Respond
