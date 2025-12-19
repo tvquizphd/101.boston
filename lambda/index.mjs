@@ -216,7 +216,7 @@ export const handler = async (event) => {
 				);
 			}
 			catch (e) {
-				console.log("Username Already exists")
+				console.log("DEBUG: Username Already exists")
 				console.log(e);	
 			}
 
