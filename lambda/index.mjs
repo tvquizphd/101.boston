@@ -2,8 +2,6 @@ import {
 	ApiGatewayManagementApiClient, PostToConnectionCommand
 } from '@aws-sdk/client-apigatewaymanagementapi';
 import { OPS, OP } from "opaque-low-io";
-import { Octokit } from "octokit";
-import http from 'http';
 import crypto from "crypto";
 import {
 	SecretsManagerClient,
@@ -64,7 +62,7 @@ const read_aws_secret = async (secret_name) => {
 	return JSON.parse(response.SecretString);
 };
 
-const login_github = async () => {
+const to_github_auth = async () => {
   let auth = "";
 	try {
 		const result = await read_aws_secret(
@@ -76,14 +74,11 @@ const login_github = async () => {
 	catch (error) {
 		return null;
 	}
-	return {
-    auth,
-    octokit: new Octokit({ auth })
-  };
+	return { auth };
 }
 
 async function add_items(
-  octokit, auth, options, items
+  auth, options, items
 ) {
   const { owner, repo, path, branch } = options;
   const { name, email, message } = options;
@@ -214,10 +209,10 @@ export const handler = async (event) => {
 			const body = JSON.parse(event.body);
 			const { username, password } = body.v.client_auth_data;
 
-			const{ octokit, auth } = await login_github();
+			const{ auth } = await to_github_auth();
 			let github_result = null;
-			if (octokit) {
-				github_result = await add_items(octokit, auth, git_options, [
+			if (auth) {
+				github_result = await add_items(auth, git_options, [
           new_item()
         ])
 		}
