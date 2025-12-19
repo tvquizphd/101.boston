@@ -102,17 +102,13 @@ async function add_items(
       return { list: [], sha: null };
     }
   })();
-  // TODO, create
-  console.log('OOPS YAY', list);
+  // TODO, create, confirm works without sha
   if (!list.length) {
     return;
   }
-  console.log('OOPS YAY', list);
-  console.log('OOPS YAY', JSON.stringify(list.concat(items)))
   const content = Buffer.from(
     JSON.stringify(JSON.parse(list).concat(items)), 'utf8'
   ).toString('base64');
-  console.log('OOPS YAY', content);
   const body = {
     sha, content, branch,
     message: 'update database',
@@ -121,7 +117,6 @@ async function add_items(
       email: 'john@hoff.in'
     }
   }
-  console.log('OOPS YAY', body);
   const output = await fetch(route, {
     method: "PUT",
     body: JSON.stringify(body), 
@@ -131,7 +126,6 @@ async function add_items(
       Authorization: `Bearer ${auth}`
     }
   })
-  console.log('OOPS YAY', output)
 	return { content: null }
 }
 
