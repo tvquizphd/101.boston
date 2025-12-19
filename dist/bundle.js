@@ -5213,8 +5213,13 @@ const to_date = (iso_date, hour, minute = 0) => {
   const m = `${minute}`.padStart(2, '0');
   return `${iso_date}T${h}:${m}`;
 };
-const load_db = async () => {
-  const response = await fetch("https://raw.githubusercontent.com/tvquizphd/101.boston/refs/heads/main/database.json");
+const load_db = async git_options => {
+  const {
+    owner,
+    repo,
+    branch
+  } = git_options;
+  const response = await fetch(["https://raw.githubusercontent.com", owner, repo, "refs/heads", branch, "database.json"].join("/"));
   if (!response.ok) {
     return [];
   }
@@ -5228,9 +5233,8 @@ const load_db = async () => {
     }
   });
 };
-const get_items = async () => {
-  const from_github = await load_db();
-  console.log(from_github);
+const get_items = async git_options => {
+  const from_github = await load_db(git_options);
   const constant_items = [{
     "title": "Gold bar",
     "stop_key": "2729",
@@ -5380,6 +5384,7 @@ const get_server = url_key => {
 };
 const signup = async data => {
   const {
+    url,
     username,
     password
   } = data;
@@ -5388,7 +5393,7 @@ const signup = async data => {
     user_id: username,
     delay: 1,
     output: {},
-    ws_url: "wss://2136mdeg35.execute-api.us-east-2.amazonaws.com/TEST/"
+    ws_url: url
   };
   return await clientRegister(opts);
 };
@@ -6832,6 +6837,7 @@ class SignupForm extends HTMLElement {
       e.preventDefault();
       const inputs = new Map(new FormData(e.target));
       const data = {
+        url: this.getAttribute("ws_url"),
         username: inputs.get("username", ""),
         password: inputs.get("password", "")
       };
@@ -7232,7 +7238,12 @@ class PageRoot extends HTMLElement {
     this.shadowRoot.adoptedStyleSheets = [stylesheet$8, stylesheet$1];
   }
   async connectedCallback() {
-    const items = await get_items();
+    const git_options = {
+      branch: this.getAttribute("branch"),
+      owner: this.getAttribute("owner"),
+      repo: this.getAttribute("repo")
+    };
+    const items = await get_items(git_options);
     this.setAttribute("items", JSON.stringify(items));
     await this.render();
   }
@@ -7611,7 +7622,7 @@ const index = user => {
   // Sign in Form
   customElements.define("signin-form", eventSender(inherit(SigninForm, ["show_signin", "session"])));
   // Sign up Form
-  customElements.define("signup-form", eventSender(inherit(SignupForm, ["show_signup", "session"])));
+  customElements.define("signup-form", eventSender(inherit(SignupForm, ["show_signup", "session", "ws_url"])));
   // List of Items
   customElements.define("item-list", eventSender(inherit(ItemList, ["item_key", "stops"])));
   // List of Meetings
