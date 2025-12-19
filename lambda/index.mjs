@@ -91,11 +91,10 @@ const login_github = async () => {
 	return new GitHubEditor({ auth });
 }
 
-const add_entries = async (octokit, entries) => {
+const add_entries = async (octokit, options, entries) => {
 	try {
 		const { updated, deleted, data } = await octokit.createOrUpdateTextFile({
-			owner: "tvquizphd",
-			repo: "101.boston",
+      ...options,
 			path: "database.json",
 			content({ exists, content }) {
 				// do not create file
@@ -153,6 +152,11 @@ const vStart = async (opts) => {
 
 export const handler = async (event) => {
   console.log('WebSocket event received:', event);
+  const git_options = {
+			owner: "tvquizphd",
+			repo: "101.boston",
+      branch: "after-deadline"
+  }
 
 	const { connectionId, domainName, stage } = event.requestContext;
 	const { routeKey } = event.requestContext;
@@ -164,18 +168,6 @@ export const handler = async (event) => {
   let response;
 
   switch (routeKey) {
-    case '$connect':
-      // Handle new connection
-      console.log('Client connected:', connectionId);
-      response = { statusCode: 200, body: 'Connected.' };
-      break;
-
-    case '$disconnect':
-      // Handle disconnection
-      console.log('Client disconnected:', connectionId);
-      response = { statusCode: 200, body: 'Disconnected.' };
-      break;
-
     case 'client_auth_data':
 
 			const body = JSON.parse(event.body);
@@ -184,7 +176,7 @@ export const handler = async (event) => {
 			const octokit = await login_github();
 			let github_result = null;
 			if (octokit) {
-				github_result = await add_entries(octokit, [
+				github_result = await add_entries(octokit, git_options, [
           new_item()
         ])
 		}
@@ -199,7 +191,6 @@ export const handler = async (event) => {
 			}
 
 			// Respond
-
 			const apiGatewayClient = new ApiGatewayManagementApiClient({
 					endpoint: `https://${domainName}/${stage}`,
 			});
