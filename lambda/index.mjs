@@ -152,10 +152,11 @@ const vStart = async (opts) => {
 
 export const handler = async (event) => {
   console.log('WebSocket event received:', event);
+  // Ensure this matches client index.html
   const git_options = {
+      branch: "after-deadline",
 			owner: "tvquizphd",
-			repo: "101.boston",
-      branch: "after-deadline"
+			repo: "101.boston"
   }
 
 	const { connectionId, domainName, stage } = event.requestContext;
