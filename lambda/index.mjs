@@ -104,7 +104,7 @@ async function add_items(
   })();
   // TODO, create, confirm works without sha
   if (!list.length) {
-    return;
+    return; false
   }
   const content = Buffer.from(
     JSON.stringify(JSON.parse(list).concat(items)), 'utf8'
@@ -126,7 +126,7 @@ async function add_items(
       Authorization: `Bearer ${auth}`
     }
   })
-	return { content: null }
+  return true;
 }
 
 /*
@@ -204,19 +204,23 @@ export const handler = async (event) => {
 			const { username, password } = body.v.client_auth_data;
 
 			const{ auth } = await to_github_auth();
-			let github_result = null;
 			if (auth) {
-				github_result = await add_items(auth, git_options, [
+				const success = await add_items(auth, git_options, [
           new_item()
         ])
-		}
+        if (success) {
+          console.log("DEBUG: We updated database.json")
+        }
+        console.log("ERROR: We failed to update database.json")
+		  }
 			try {
 				await create_aws_secret(
 					username, { password }
 				);
+				console.log("DEBUG: We added a secret")
 			}
 			catch (e) {
-				console.log("DEBUG: Username Already exists")
+				console.log("ERROR: We failed to add a secret")
 				console.log(e);	
 			}
 
