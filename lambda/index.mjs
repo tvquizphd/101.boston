@@ -1,14 +1,10 @@
 import { 
 	ApiGatewayManagementApiClient, PostToConnectionCommand
 } from '@aws-sdk/client-apigatewaymanagementapi';
-
 import { OPS, OP } from "opaque-low-io";
 import { Octokit } from "octokit";
 import http from 'http';
 import crypto from "crypto";
-import {
-	createOrUpdateTextFile
-} from "@octokit/plugin-create-or-update-text-file";
 import {
 	SecretsManagerClient,
 	GetSecretValueCommand,
@@ -80,30 +76,68 @@ const login_github = async () => {
 	catch (error) {
 		return null;
 	}
-	return new Octokit({ auth });
+	return {
+    auth,
+    octokit: new Octokit({ auth })
+  };
 }
 
-const add_entries = async (octokit, options, entries) => {
-	try {
-		const { updated, deleted, data } = await createOrUpdateTextFile(octokit, {
-      ...options,
-			path: "database.json",
-			content({ exists, content }) {
-				// do not create file
-				if (!exists) return null;
-				const existing = JSON.parse(content);
-				return JSON.stringify([
-					...existing, ...entries
-				])
-			},
-			message: "update database"
-		})
-    console.log("DEBUG: we updated the 'database'")
-		return { updated };
-	}
-	catch ( error ) {
-		return { error };
-	}
+async function add_items(
+  octokit, auth, options, items
+) {
+  const { owner, repo, path, branch } = options;
+  const { name, email, message } = options;
+  const root = "https://api.github.com";
+  const route = `${root}/repos/${owner}/${repo}/contents/${path}`;
+  const result = await fetch(`${route}?ref=${branch}`, {
+    headers: {
+      Accept: "application/vnd.github.object",
+      "X-GitHub-Api-Version": "2022-11-28",
+      Authorization: `Bearer ${auth}`
+    }
+  })
+  const { list, sha } = await (async () => {
+    try {
+      const { content, sha } = JSON.parse(await result.text());
+      const list = Buffer.from(content, 'base64').toString('utf-8');
+      return { list, sha };
+    }
+    catch (e) {
+      console.error(e);
+      return { list: [], sha: null };
+    }
+  })();
+  // TODO, create
+  console.log('OOPS YAY', list);
+  if (!list.length) {
+    return;
+  }
+  console.log('OOPS YAY', list);
+  console.log('OOPS YAY', JSON.stringify(list.concat(items)))
+  const content = Buffer.from(
+    JSON.stringify(list.concat(items)), 'utf8'
+  ).toString('base64');
+  console.log('OOPS YAY', content);
+  const body = {
+    sha, content, branch,
+    message: 'update database',
+    committer: {
+      name: name,
+      email: 'john@hoff.in'
+    }
+  }
+  console.log('OOPS YAY', body);
+  const output = await fetch(route, {
+    method: "PUT",
+    body: JSON.stringify(body), 
+    headers: {
+      Accept: "application/vnd.github.object",
+      "X-GitHub-Api-Version": "2022-11-28",
+      Authorization: `Bearer ${auth}`
+    }
+  })
+  console.log('OOPS YAY', output)
+	return { content: null }
 }
 
 /*
@@ -147,7 +181,11 @@ export const handler = async (event) => {
   console.log('WebSocket event received:', event);
   // Ensure this matches client index.html
   const git_options = {
+			path: "database.json",
       branch: "after-deadline",
+      name: "John",
+      message: "update item list",
+      email: "john@hoff.in",
 			owner: "tvquizphd",
 			repo: "101.boston"
   }
@@ -176,10 +214,10 @@ export const handler = async (event) => {
 			const body = JSON.parse(event.body);
 			const { username, password } = body.v.client_auth_data;
 
-			const octokit = await login_github();
+			const{ octokit, auth } = await login_github();
 			let github_result = null;
 			if (octokit) {
-				github_result = await add_entries(octokit, git_options, [
+				github_result = await add_items(octokit, auth, git_options, [
           new_item()
         ])
 		}
