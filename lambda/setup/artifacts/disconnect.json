@@ -1,7 +1,7 @@
 {
     "ApiKeyRequired": false,
     "AuthorizationType": "NONE",
-    "RouteId": "1i90r4j",
-    "RouteKey": "client_auth_data",
+    "RouteId": "6mj1t70",
+    "RouteKey": "$disconnect",
     "Target": "integrations/v9f50jh"
 }

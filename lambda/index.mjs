@@ -169,6 +169,16 @@ export const handler = async (event) => {
   let response;
 
   switch (routeKey) {
+    case '$connect':
+      // Handle new connection
+      console.log('Client connected:', connectionId);
+      response = { statusCode: 200, body: 'Connected.' };
+      break;
+    case '$disconnect':
+      // Handle disconnection
+      console.log('Client disconnected:', connectionId);
+      response = { statusCode: 200, body: 'Disconnected.' };
+      break;
     case 'client_auth_data':
 
 			const body = JSON.parse(event.body);

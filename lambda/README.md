@@ -34,16 +34,22 @@ lambda=$(jq -r .FunctionArn artifacts/secret-lambda.json)
 aws apigatewayv2 create-integration --api-id $secretapiid --integration-type AWS_PROXY --integration-method POST --integration-uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/$lambda/invocations > artifacts/secret-integration.json
 secretintegrationid=$(jq -r .IntegrationId artifacts/secret-integration.json)
 
-aws apigatewayv2 create-route --api-id $secretapiid --route-key 'client_auth_data' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/client_auth_data.json
+aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key 'client_auth_data' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/client_auth_data.json
+aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key '$connect' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/connect.json
+aws apigatewayv2 create-route --region us-east-2 --region us-east-2 --api-id $secretapiid --route-key '$disconnect' --authorization-type NONE --target "integrations/$secretintegrationid" > artifacts/disconnect.json
 routeid=$(jq -r .RouteId artifacts/client_auth_data.json)
-aws apigatewayv2 create-route-response --api-id $secretapiid --route-id $routeid --route-response-key '$default' > artifacts/client_auth_data-response.json
+nws apigatewayv2 create-route --region us-east-2-response --region us-east-2 --api-id $secretapiid --route-id $routeid --route-response-key '$default' > artifacts/client_auth_data-response.json
 
 aws apigatewayv2 create-stage --api-id $secretapiid --stage-name dev > artifacts/secret-stage.json
 aws apigatewayv2 create-deployment --api-id $secretapiid --stage-name dev > artifacts/secret-deployment.json
 
 lambdaname=$(jq -r .FunctionName artifacts/secret-lambda.json)
 accountid=$(aws sts get-caller-identity | jq -r '.Account')
-aws lambda add-permission --function-name $lambdaname --statement-id "APIGatewayInvoke" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/*/client_auth_data"
+aws lambda add-permission --function-name $lambdaname --statement-id "api" --action "lambda:InvokeFunction" --principal "apigateway.amazonaws.com" --source-arn "arn:aws:execute-api:us-east-2:$accountid:$secretapiid/*/secret"
+
+aws logs create-log-group --log-group-name "/aws/lambda/101-boston-log-group" --region us-east-2 
+aws logs put-retention-policy --log-group-name "/aws/lambda/101-boston-log-group" --retention-in-days 7 --region us-east-2
+aws lambda update-function-configuration --function-name "$lambdaname" --logging-config LogGroup=/aws/lambda/101-boston-log-group --region us-east-2
 
 echo wss://$secretapiid.execute-api.us-east-2.amazonaws.com/dev
 ```
