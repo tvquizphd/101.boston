@@ -211,7 +211,9 @@ export const handler = async (event) => {
         if (success) {
           console.log("DEBUG: We updated database.json")
         }
-        console.log("ERROR: We failed to update database.json")
+        else {
+          console.log("ERROR: We failed to update database.json")
+        }
 		  }
 			try {
 				await create_aws_secret(
