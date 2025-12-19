@@ -1,0 +1,24 @@
+{
+  "openapi": "3.0.1",
+  "protocolType": "WEBSOCKET",
+  "info": {
+    "title": "secret-websocket",
+    "version": "v1"
+  },
+  "paths": {
+    "client_auth_data": {
+      "post": {
+        "summary": "Client Auth Data",
+        "operationId": "client_auth_data",
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-2:008998293025:function:secret/invocations",
+          "credentials": "arn:aws:iam::008998293025:role/101BostonAPIRole",
+          "integrationHttpMethod": "POST",
+          "payloadFormatVersion": "2.0",
+          "type": "AWS_PROXY"
+        }
+      }
+    }
+  },
+  "x-amazon-apigateway-route-selection-expression": "$request.body.k"
+}

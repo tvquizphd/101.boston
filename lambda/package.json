@@ -1,14 +1,14 @@
 {
-  "name": "register-user",
+  "name": "secret-lambda",
   "version": "1.0.0",
   "main": "./index.mjs",
   "scripts": {
-    "zip": "zip -r register-user.zip .",
-    "up": "aws lambda update-function-code --function-name register-user --zip-file fileb://~/listings/lambda/register-user.zip"
+    "zip": "zip -x *.zip -r secret-lambda.zip . && mv secret-lambda.zip setup/",
+    "up": "aws lambda update-function-code --function-name secret --zip-file fileb://setup/secret-lambda.zip"
   },
   "dependencies": {
-    "@aws-sdk/client-apigatewaymanagementapi": "^3.953.0",
-    "@aws-sdk/client-secrets-manager": "^3.953.0",
+    "@aws-sdk/client-apigatewaymanagementapi": "^3.955.0",
+    "@aws-sdk/client-secrets-manager": "^3.955.0",
     "@octokit/plugin-create-or-update-text-file": "^6.0.3",
     "octokit": "^5.0.5",
     "opaque-low-io": "^4.0.0"

@@ -1,0 +1,7 @@
+{
+    "ApiKeyRequired": false,
+    "AuthorizationType": "NONE",
+    "RouteId": "htzklir",
+    "RouteKey": "client_auth_data",
+    "Target": "integrations/v9f50jh"
+}
