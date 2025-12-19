@@ -7,8 +7,8 @@
     "up": "aws lambda update-function-code --function-name secret --zip-file fileb://setup/secret-lambda.zip"
   },
   "dependencies": {
-    "@aws-sdk/client-apigatewaymanagementapi": "^3.955.0",
-    "@aws-sdk/client-secrets-manager": "^3.955.0",
+    "@aws-sdk/client-apigatewaymanagementapi": "3.953.0",
+    "@aws-sdk/client-secrets-manager": "3.953.0",
     "opaque-low-io": "^4.0.0"
   }
 }

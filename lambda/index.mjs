@@ -39,9 +39,8 @@ const create_aws_secret = async (name, value) => {
 		SecretString: JSON.stringify(value) 
 	};
 	const command = new CreateSecretCommand(input);
-	const response = await client.send(command);
-	console.log("DEBUG: we saved the secret")
-	return {input, response};
+	console.log("DEBUG: we're trying to save the secret...")
+	await client.send(command);
 }
 
 const read_aws_secret = async (secret_name) => {
@@ -222,9 +221,10 @@ export const handler = async (event) => {
 				console.log("DEBUG: We added a secret")
 			}
 			catch (e) {
-				console.log("ERROR: We failed to add a secret")
 				console.log(e);	
+				console.log("ERROR: We failed to add a secret")
 			}
+      console.log("DEBUG: We are trying to respond...")
 
 			// Respond
 			const apiGatewayClient = new ApiGatewayManagementApiClient({
@@ -234,6 +234,7 @@ export const handler = async (event) => {
 					ConnectionId: connectionId,
 					Data: JSON.stringify({ ok: "ok" }),
 			}));
+      console.log("DEBUG: We responded")
       response = { statusCode: 200, body: 'OK' };
       break;
     default:
